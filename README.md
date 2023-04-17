@@ -17,7 +17,7 @@ Requires conda & git.
         $ conda activate esgf
     
 - Create an ESGF account with the [German Climate Computing Centre](https://esgf-data.dkrz.de/user/add/?next=http://esgf-data.dkrz.de/projects/esgf-dkrz/).
-- CORDEX datasets first require registration to gain access. Apply for CORDEX access [here]3(https://esg-dn1.nsc.liu.se/ac/subscribe/CORDEX_Research) - for some reason, you may need to repeat this process more than once before access is granted.
+- CORDEX datasets first require registration to gain access. Apply for CORDEX access [here](https://esg-dn1.nsc.liu.se/ac/subscribe/CORDEX_Research) - for some reason, you may need to repeat this process more than once before access is granted.
 
 - Set some environment variables for your ESGF username, password, and the directory in which you want to store your climate model data:
 
@@ -31,7 +31,7 @@ Or add equivalent lines to your shell configuration file (such as `.bashrc` or `
 
 or
 
-        £ source .zshrc
+        $ source .zshrc
 
 You are now ready to explore the `download_tutorial.ipynb` notebook. Alternatively, edit `download.py` in a text editor of your choice and run it from the command line using:
 
