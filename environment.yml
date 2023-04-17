@@ -1,0 +1,12 @@
+name: esgf
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - esgf-pyclient=0.3.1
+  - numpy=1.24.2
+  - openssl=3.0.8
+  - pip=23.0
+  - pip:
+      - aiohttp==3.8.3
+prefix: /Users/jonniebarnsley/opt/anaconda3/envs/esgf
