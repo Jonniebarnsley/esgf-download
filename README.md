@@ -27,11 +27,11 @@ Requires conda & git.
 
 Or add equivalent lines to your shell configuration file (such as `.bashrc` or `.zshrc`) followed by (for example):
 
-        $ source .bashrc
+        $ source ~/.bashrc
 
 or
 
-        $ source .zshrc
+        $ source ~/.zshrc
 
 You are now ready to explore the `download_tutorial.ipynb` notebook. Alternatively, edit `download.py` in a text editor of your choice and run it from the command line using:
 
