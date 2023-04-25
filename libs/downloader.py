@@ -42,7 +42,7 @@ async def download_file(
         return
 
     # open client session
-    async with session.request('get', url, ssl=ssl) as response:
+    async with session.request('get', url, ssl=ssl, timeout=36000) as response:
         
         temp_filepath = filepath+'.tmp' # temporary filename whilst downloading
         chunk_size = 2048
@@ -61,7 +61,7 @@ async def download_multiple(
     Coroutine that takes ayncio loop object and pyesgf files object and asynchronously downloads them to
     a local directory. 
     '''
-    async with aiohttp.ClientSession(loop=loop) as session:
+    async with aiohttp.ClientSession(loop=loop, timeout=36000) as session:
         tasks = [download_file(session, file, ssl, local_directory) for file in files]
         await asyncio.gather(*tasks)
 
