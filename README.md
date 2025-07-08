@@ -53,7 +53,7 @@ SCENARIOS = ['historical', 'ssp126']
 VARIABLES = ['tas', 'pr', 'evspsbl', 'mrro']
 MODELS = ['CESM2-WACCM', 'MRI-ESM2-0', 'ACCESS-ESM1-5']
 ```
-Naming conventions follow ESGF standards – it's recommended that you browse the [ESGF web search tool](https://esgf-metagrid.cloud.dkrz.de/search) before specifying new parameters here. See [Customization](#customization) for further details.
+Naming conventions follow ESGF standards – it's recommended that you browse the [ESGF web search tool](https://esgf-metagrid.cloud.dkrz.de/search) before specifying new parameters here. See [Customisation](#customisation) for further details.
 
 ### Data Specifications
 ```python
@@ -120,7 +120,7 @@ Use `explore.ipynb` to:
 - Verify the ESGF node is accessible
 - Check that a dataset is available
 
-## Customization
+## Customisation
 
 All customization should be done in `config.py`. Here are the main areas you can modify:
 
