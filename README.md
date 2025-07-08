@@ -57,7 +57,7 @@ Naming conventions follow ESGF standards – it's recommended that you browse th
 
 ### Data Specifications
 ```python
-FREQUENCY = 'mon'   # 3hr, day, mon, yr
+FREQUENCY = 'mon'   # time resolution of data, mon - monthly. Also 3hr, day, yr
 GRID_LABEL = 'gn'   # gn - native grid, gr - regridded to lat-lon
 ```
 
