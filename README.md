@@ -12,7 +12,7 @@ You need an ESGF account to download data. If you don't have one, you can create
 
 ### Python Environment
 - Python 3.7 or higher
-- pip or conda for package management
+- pip for package management
 
 ## Installation
 
