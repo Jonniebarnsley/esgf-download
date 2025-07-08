@@ -49,19 +49,18 @@ The configuration is stored in `config.py`. Key parameters you can modify:
 ### Data Selection
 ```python
 PROJECT = 'CMIP6'
-SCENARIOS = ['historical', 'ssp126'] # 'ssp585', 'ssp534-over'
-VARIABLES = ['tas', 'pr', 'evspsbl', 'mrro'] # 'thetao', 'so'
-MODELS = ['CESM2-WACCM', 'MRI-ESM2-0', 'ACCESS-ESM1-5', 
-          'CanESM5', 'CNRM-ESM2-1', 'MIROC-ES2L'] # 'IPSL-CM6A-LR', 'UKESM1-0-LL'
+SCENARIOS = ['historical', 'ssp126']
+VARIABLES = ['tas', 'pr', 'evspsbl', 'mrro']
+MODELS = ['CESM2-WACCM', 'MRI-ESM2-0', 'ACCESS-ESM1-5']
 ```
 Naming conventions follow ESGF standards – it's recommended that you browse the [ESGF web search tool](https://esgf-metagrid.cloud.dkrz.de/search) before specifying new parameters here. 
 
-New variables should add the appropriate line to `TABLE_ID` in `config.py`:
+New variables should add the appropriate line to [`TABLE_ID`](config.py#L52):
 - `Amon`: atmospheric variables
 - `Omon`: ocean variables
 - `Lmon`: land surface variables.
 
-When adding new models, you should also ensure a correct variant label in the [`VARIANT_LABEL` lookup](config.py#L66). For most models, this will be `r1i1p1f1`, although you may be interested in other realisations.
+When adding new models, you should also ensure a correct variant label in [`VARIANT_LABEL`](config.py#L66). For most CMIP6 models, this will be `r1i1p1f1`, although you may be interested in other realisations.
 
 ### Data Specifications
 ```python
