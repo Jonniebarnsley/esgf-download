@@ -53,14 +53,7 @@ SCENARIOS = ['historical', 'ssp126']
 VARIABLES = ['tas', 'pr', 'evspsbl', 'mrro']
 MODELS = ['CESM2-WACCM', 'MRI-ESM2-0', 'ACCESS-ESM1-5']
 ```
-Naming conventions follow ESGF standards – it's recommended that you browse the [ESGF web search tool](https://esgf-metagrid.cloud.dkrz.de/search) before specifying new parameters here. 
-
-New variables should add the appropriate line to [`TABLE_ID`](config.py#L52):
-- `Amon`: atmospheric variables
-- `Omon`: ocean variables
-- `Lmon`: land surface variables.
-
-When adding new models, you should also ensure a correct variant label in [`VARIANT_LABEL`](config.py#L66). For most CMIP6 models, this will be `r1i1p1f1`, although you may be interested in other realisations.
+Naming conventions follow ESGF standards – it's recommended that you browse the [ESGF web search tool](https://esgf-metagrid.cloud.dkrz.de/search) before specifying new parameters here. See [Customization](#customization) for further details.
 
 ### Data Specifications
 ```python
@@ -72,7 +65,7 @@ GRID_LABEL = 'gn'   # gn - native grid, gr - regridded to lat-lon
 ```python
 MYPROXY_HOST = 'esgf-node.ipsl.upmc.fr'  # Login node
 SEARCH_NODE = 'http://esgf-node.ipsl.upmc.fr/esg-search'  # Search node
-DATA_NODE_PREFERENCE = 'esgf.ceda.ac.uk'  # Download node (choose geographically closest to you)
+DATA_NODE_PREFERENCE = 'esgf.ceda.ac.uk'  # Download node (geographically closest to you)
 ```
 
 N.B. Your login details stored as environment variables must correspond to the login node specified here. It is possible to have accounts with each login node, possibly with different usernames and passwords.
@@ -121,19 +114,11 @@ Downloaded files are organized in the following structure:
 ESGF login can be temperamental. If you're having issues:
 1. Try a different ESGF node for login
 2. Ensure your credentials are correct
-3. Check if your account is active
 
 ### Download Failures
-- Check your internet connection
+Use `explore.ipynb` to:
 - Verify the ESGF node is accessible
-- Ensure you have sufficient disk space
-- Check if the requested data is available
-
-### SSL Certificate Issues
-The tool handles SSL certificates automatically, but if you encounter issues:
-1. Ensure the `pyesgf` package is properly installed
-2. Check that your ESGF credentials are valid
-3. Try logging in manually to the ESGF web interface first
+- Check that a dataset is available
 
 ## Customization
 
@@ -151,6 +136,11 @@ TABLE_ID = {
     'new_variable': 'Amon'  # or appropriate table
 }
 ```
+
+Table IDs correspond to the earth system component which the variable originates from:
+- `Amon`: atmosphere,
+- `Omon`: ocean,
+- `Lmon`: land surface.
 
 ### Adding New Models
 Add new models to the `MODELS` list and their variant labels to `VARIANT_LABEL`:
