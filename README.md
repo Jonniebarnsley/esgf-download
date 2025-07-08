@@ -31,7 +31,7 @@ You need an ESGF account to download data. If you don't have one, you can create
 
 1. **Clone the repository**:
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/Jonniebarnsley/esgf-download.git
    cd esgf-download
    ```
 
