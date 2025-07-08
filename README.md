@@ -1,19 +1,6 @@
 # ESGF Download Tool
 
-A Python tool for downloading climate model data from the Earth System Grid Federation (ESGF). This tool provides automated downloading of CMIP6 climate model outputs with configurable parameters for scenarios, models, and variables.
-
-## Overview
-
-The ESGF Download Tool simplifies the process of downloading climate model data from ESGF nodes. It handles authentication, file discovery, and downloading with progress tracking. The tool is specifically configured for CMIP6 data but can be easily modified for other projects.
-
-## Features
-
-- **Automated Authentication**: Handles ESGF login and SSL certificate management
-- **Configurable Downloads**: Easy configuration of scenarios, models, variables, and time periods
-- **Progress Tracking**: Visual progress bars for file downloads
-- **Resume Capability**: Skips already downloaded files
-- **Organized File Structure**: Automatically organizes downloaded files in a logical directory structure
-- **Multiple ESGF Node Support**: Can download from different ESGF nodes based on geographic proximity
+A Python tool for downloading climate model data from the Earth System Grid Federation (ESGF). This tool provides automated downloading of CMIP6 climate model outputs with configurable parameters for scenarios, models, and variables. The tool is specifically configured for CMIP6 data but can be easily modified for other projects.
 
 ## Prerequisites
 
