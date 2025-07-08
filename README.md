@@ -19,9 +19,9 @@ The ESGF Download Tool simplifies the process of downloading climate model data 
 
 ### ESGF Account
 You need an ESGF account to download data. If you don't have one, you can create an account at any of these ESGF nodes:
-- [esgf.ceda.ac.uk](https://esgf.ceda.ac.uk)
-- [esgf-data.dkrz.de](https://esgf-data.dkrz.de)
-- [esgf-node.ipsl.upmc.fr](https://esgf-node.ipsl.upmc.fr)
+- [esgf.ceda.ac.uk](https://esgf-ui.ceda.ac.uk/cog/projects/esgf-ceda/)
+- [esgf-data.dkrz.de](https://esgf-metagrid.cloud.dkrz.de/search)
+- [esgf-node.ipsl.upmc.fr](https://esgf-node.ipsl.upmc.fr)  
 
 ### Python Environment
 - Python 3.7 or higher
@@ -57,20 +57,28 @@ You need an ESGF account to download data. If you don't have one, you can create
 
 ## Configuration
 
-The main configuration is in `download.py`. Key parameters you can modify:
+The configuration is stored in `config.py`. Key parameters you can modify:
 
 ### Data Selection
 ```python
-SCENARIOS = ['ssp126']  # ['historical', 'ssp126', 'ssp585']
-VARIABLES = ['tas', 'pr', 'evspsbl', 'mrro', 'thetao', 'so']
-MODELS = ['CESM2-WACCM', 'IPSL-CM6A-LR', 'MRI-ESM2-0', 'ACCESS-ESM1-5', 
-          'CanESM5', 'CNRM-ESM2-1', 'MIROC-ES2L']
+PROJECT = 'CMIP6'
+SCENARIOS = ['historical', 'ssp126'] # 'ssp585', 'ssp534-over'
+VARIABLES = ['tas', 'pr', 'evspsbl', 'mrro'] # 'thetao', 'so'
+MODELS = ['CESM2-WACCM', 'MRI-ESM2-0', 'ACCESS-ESM1-5', 
+          'CanESM5', 'CNRM-ESM2-1', 'MIROC-ES2L'] # 'IPSL-CM6A-LR', 'UKESM1-0-LL'
 ```
+Naming conventions follow ESGF standards – it's recommended that you browse the [ESGF web search tool](https://esgf-metagrid.cloud.dkrz.de/search) before specifying new parameters here. 
+
+New variables should add the appropriate line to `TABLE_ID` in `config.py`:
+- `Amon`: atmospheric variables
+- `Omon`: ocean variables
+- `Lmon`: land surface variables.
+
+When adding new models, you should also ensure a correct variant label in the [`VARIANT_LABEL` lookup](config.py#L66). For most models, this will be `r1i1p1f1`, although you may be interested in other realisations.
 
 ### Data Specifications
 ```python
-PROJECT = 'CMIP6'
-FREQUENCY = 'mon'   # monthly data
+FREQUENCY = 'mon'   # 3hr, day, mon, yr
 GRID_LABEL = 'gn'   # gn - native grid, gr - regridded to lat-lon
 ```
 
@@ -78,8 +86,10 @@ GRID_LABEL = 'gn'   # gn - native grid, gr - regridded to lat-lon
 ```python
 MYPROXY_HOST = 'esgf-node.ipsl.upmc.fr'  # Login node
 SEARCH_NODE = 'http://esgf-node.ipsl.upmc.fr/esg-search'  # Search node
-DATA_NODE_PREFERENCE = 'esgf.ceda.ac.uk'  # Download node (choose closest to you)
+DATA_NODE_PREFERENCE = 'esgf.ceda.ac.uk'  # Download node (choose geographically closest to you)
 ```
+
+N.B. Your login details stored as environment variables must correspond to the login node specified here. It is possible to have accounts with each login node, possibly with different usernames and passwords.
 
 ## Usage
 
@@ -106,15 +116,15 @@ The notebook allows you to:
 Downloaded files are organized in the following structure:
 ```
 <DATA_HOME>/
-├── CMIP6/
-│   ├── ScenarioMIP/
+├── <project>/
+│   ├── <MIP>/
 │   │   ├── <institute>/
 │   │   │   ├── <model>/
 │   │   │   │   ├── <experiment>/
 │   │   │   │   │   ├── <realisation>/
 │   │   │   │   │   │   ├── <time_resolution>/
 │   │   │   │   │   │   │   ├── <variable>/
-│   │   │   │   │   │   │   │   ├── gr/
+│   │   │   │   │   │   │   │   ├── <grid_type>/
 │   │   │   │   │   │   │   │   │   └── <version>/
 │   │   │   │   │   │   │   │   │       └── <files>
 ```
@@ -140,6 +150,8 @@ The tool handles SSL certificates automatically, but if you encounter issues:
 3. Try logging in manually to the ESGF web interface first
 
 ## Customization
+
+All customization should be done in `config.py`. Here are the main areas you can modify:
 
 ### Adding New Variables
 To download additional variables, add them to the `VARIABLES` list and their corresponding table IDs to `TABLE_ID`:
