@@ -92,10 +92,8 @@ python download.py
 This will download all configured datasets based on the parameters in the script.
 
 ### Interactive Exploration
-Use the Jupyter notebook for interactive exploration:
-```bash
-jupyter notebook explore.ipynb
-```
+Use the Jupyter notebook `explore.ipynb` to explore available datasets before specifying them in `download.py`.
+
 
 The notebook allows you to:
 - Test ESGF connectivity
