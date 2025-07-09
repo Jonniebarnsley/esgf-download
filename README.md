@@ -1,4 +1,4 @@
-# ESGF Download Tool
+# ESGF Download
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
