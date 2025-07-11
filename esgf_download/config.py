@@ -3,11 +3,9 @@ Configuration loader for ESGF download tool.
 Loads configuration from YAML files.
 """
 
-from asyncio import streams
 import os
-import yaml  # type: ignore
+import yaml
 from pathlib import Path
-from typing import Optional
 
 
 class Config:
@@ -43,19 +41,11 @@ class Config:
     def _process_config(self):
 
         """Process config data and set up convenient properties."""
-
-        auth = self._config['auth']
         
         # Get credentials from environment variables
-        self.USERNAME = os.environ.get(auth['username_env'])
-        self.PASSWORD = os.environ.get(auth['password_env'])
-        
-        # Get data path
-        data_path_env = os.environ.get(auth['data_path_env'])
-        if data_path_env:
-            self.DATA_PATH = Path(data_path_env)
-        else:
-            self.DATA_PATH = Path(auth['data_path_default'])
+        self.USERNAME = os.environ.get("ESGF_USERNAME")
+        self.PASSWORD = os.environ.get("ESGF_PASSWORD")
+        self.DATA_HOME = Path(os.environ.get("DATA_HOME", "./"))
         
         # ESGF settings
         esgf = self._config['esgf']
@@ -84,6 +74,7 @@ class Config:
 
 
 def load_config(config_path: str) -> Config:
+
     """
     Load configuration from YAML file.
     
@@ -97,4 +88,5 @@ def load_config(config_path: str) -> Config:
     Config
         Configuration object with all settings.
     """
+
     return Config(config_path) 
