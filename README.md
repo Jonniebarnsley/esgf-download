@@ -90,7 +90,7 @@ Change the `frequency` parameter:
 - `yr` - yearly
 - `3hr` - 3-hourly
 
-Naming conventions follow ESGF standards – it's recommended that you browse the [ESGF web search tool](https://esgf-metagrid.cloud.dkrz.de/search) before specifying new parameters here. See [Customisation](#customisation) for further details.
+Naming conventions follow ESGF standards – it's recommended that you browse the [ESGF web search tool](https://esgf-metagrid.cloud.dkrz.de/search) before specifying new parameters here.
 
 ## Usage
 
