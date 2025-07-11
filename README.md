@@ -46,58 +46,49 @@ You need an ESGF account to download data. If you don't have one, you can create
 
 ## Configuration
 
-The configuration is stored in `config.yaml`. Key parameters you can modify:
+The configuration is stored in `config.yaml`. Edit this file to customise the download to your specifications.
+
+### Adding New Variables
+Add new variables to the `variables` list and their corresponding table IDs to `table_mapping`:
 
 ```yaml
-# ESGF Node Configuration
-
-esgf:
-  myproxy_host: "esgf-node.ipsl.upmc.fr"
-  search_node: "http://esgf-data.dkrz.de/esg-search"
-  data_node_preference: "esgf.ceda.ac.uk"
-
-# Data Selection Configuration
 data:
-  project: "CMIP6"
-  frequency: "mon"        # monthly
-  grid_label: "gn"        # gn - native grid, gr - regridded to lat-lon
-  
-  scenarios:
-    - "historical"
-    - "ssp126"
-    - "ssp585"
-  
   variables:
     - "tas"
     - "pr"
-    - "evspsbl"
-    - "mrro"
-    - "thetao"
-    - "so"
-  
-  models:
-    - "CESM2-WACCM"
-    - "IPSL-CM6A-LR"
-    - "MRI-ESM2-0"
-    - "ACCESS-ESM1-5"
-    - "CanESM5"
-    - "CNRM-ESM2-1"
-    - "MIROC-ES2L"
+    - "new_variable"
 
-# Variable to Table ID Mapping
 table_mapping:
   tas: "Amon"
   pr: "Amon"
-  evspsbl: "Amon"
-  mrro: "Lmon"
-  thetao: "Omon"
-  so: "Omon"
+  new_variable: "Amon"  # or appropriate table
+```
 
-# Model Variant Labels
+Table IDs correspond to earth system components:
+- `Amon`: atmosphere (monthly)
+- `Omon`: ocean (monthly)  
+- `Lmon`: land surface (monthly)
+
+### Adding New Models
+Add new models to the `models` list and specify variant labels if needed:
+
+```yaml
+data:
+  models:
+    - "CESM2-WACCM"
+    - "NEW-MODEL"
+
 variant_labels:
   default: "r1i1p1f1"
-  UKESM1-0-LL: "r4i1p1f2"
+  NEW-MODEL: "r2i1p1f1"  # if different from default
 ```
+
+### Different Time Frequencies
+Change the `frequency` parameter:
+- `mon` - monthly
+- `day` - daily
+- `yr` - yearly
+- `3hr` - 3-hourly
 
 Naming conventions follow ESGF standards – it's recommended that you browse the [ESGF web search tool](https://esgf-metagrid.cloud.dkrz.de/search) before specifying new parameters here. See [Customisation](#customisation) for further details.
 
@@ -169,50 +160,6 @@ ESGF login can be temperamental. If you're having issues:
 - Validate your YAML syntax using online YAML validators
 - Check that all required sections are present in your config file
 - Ensure environment variables are set and accessible
-
-## Customisation
-
-### Adding New Variables
-Add new variables to the `variables` list and their corresponding table IDs to `table_mapping`:
-
-```yaml
-data:
-  variables:
-    - "tas"
-    - "pr"
-    - "new_variable"
-
-table_mapping:
-  tas: "Amon"
-  pr: "Amon"
-  new_variable: "Amon"  # or appropriate table
-```
-
-Table IDs correspond to earth system components:
-- `Amon`: atmosphere (monthly)
-- `Omon`: ocean (monthly)  
-- `Lmon`: land surface (monthly)
-
-### Adding New Models
-Add new models to the `models` list and specify variant labels if needed:
-
-```yaml
-data:
-  models:
-    - "CESM2-WACCM"
-    - "NEW-MODEL"
-
-variant_labels:
-  default: "r1i1p1f1"
-  NEW-MODEL: "r2i1p1f1"  # if different from default
-```
-
-### Different Time Frequencies
-Change the `frequency` parameter:
-- `mon` - monthly
-- `day` - daily
-- `yr` - yearly
-- `3hr` - 3-hourly
 
 ## Acknowledgments
 
