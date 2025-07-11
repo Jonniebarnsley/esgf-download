@@ -19,6 +19,8 @@ def download_file(file: File, progress: Progress) -> None:
     ----------
     file : File
         File object to download from ESGF.
+    progress : Progress
+        Progress object to track download progress in ui.
     """
     if file.exists():
         print(f"File {file.filename} already exists, skipping download.")
@@ -49,6 +51,7 @@ def download_file(file: File, progress: Progress) -> None:
         with open(filepath, 'wb') as f:
             for chunk in response.iter_content(chunk_size=chunk_size):
                 if keyboard_interrupt:  # Check for shutdown during download
+                    progress.update(task_id, description=f"[red]✗ {filename}")
                     file.remove()
                     return
                 if chunk:
