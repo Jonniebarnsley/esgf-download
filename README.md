@@ -48,7 +48,9 @@ You need an ESGF account to download data. If you don't have one, you can create
 
 The configuration is stored in `config.yaml`. Key parameters you can modify:
 
+```yaml
 # ESGF Node Configuration
+
 esgf:
   myproxy_host: "esgf-node.ipsl.upmc.fr"
   search_node: "http://esgf-data.dkrz.de/esg-search"
@@ -61,9 +63,9 @@ data:
   grid_label: "gn"        # gn - native grid, gr - regridded to lat-lon
   
   scenarios:
+    - "historical"
     - "ssp126"
-    # - "historical"
-    # - "ssp585"
+    - "ssp585"
   
   variables:
     - "tas"
