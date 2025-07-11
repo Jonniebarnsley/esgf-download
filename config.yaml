@@ -10,22 +10,24 @@ esgf:
 # Data Selection Configuration
 data:
   project: "CMIP6"
-  frequency: "mon"        # monthly
+  frequency: "mon"        # time resolution: 3hr, day, mon, yr
   grid_label: "gn"        # gn - native grid, gr - regridded to lat-lon
   
   scenarios:
+    - "historical"
     - "ssp126"
-    # - "historical"
-    # - "ssp585"
+    - "ssp585"
   
+  # Variables follow ESGF naming conventions
   variables:
-    - "tas"
-    - "pr"
-    - "evspsbl"
-    - "mrro"
-    - "thetao"
-    - "so"
+    - "tas"       # surface temperature
+    - "pr"        # precipitation
+    - "evspsbl"   # evaporation and sublimation
+    - "mrro"      # runoff
+    - "thetao"    # ocean potential temperature
+    - "so"        # ocean salinity
   
+  # Specific model versions required – see ESGF web search tool for details
   models:
     - "CESM2-WACCM"
     - "IPSL-CM6A-LR"
@@ -34,10 +36,12 @@ data:
     - "CanESM5"
     - "CNRM-ESM2-1"
     - "MIROC-ES2L"
-    # - "ACCESS-CM2"
-    # - "UKESM1-0-LL"
+    - "ACCESS-CM2"
+    - "UKESM1-0-LL"
 
 # Variable to Table ID Mapping
+# Amon - atmosphere, Omon - ocean, Lmon - land surface
+# Any new variables added above should also be added here with the appropriate table ID
 table_mapping:
   tas: "Amon"
   pr: "Amon"
@@ -47,7 +51,7 @@ table_mapping:
   so: "Omon"
 
 # Model Variant Labels
-# UKESM1-0-LL has a different variant label to most models
+# Enter custom variant labels for models here
 variant_labels:
   default: "r1i1p1f1"
-  UKESM1-0-LL: "r4i1p1f2" 
+  UKESM1-0-LL: "r4i1p1f2"
