@@ -1,14 +1,5 @@
-# Configuration file for ESGF download tool
 # This file contains all configurable parameters for downloading climate model data
 # from the Earth System Grid Federation (ESGF)
-
-# Authentication Configuration
-# Set these environment variables: ESGF_USERNAME, ESGF_PASSWORD, DATA_HOME
-auth:
-  username_env: "ESGF_USERNAME"
-  password_env: "ESGF_PASSWORD"
-  data_path_env: "DATA_HOME"
-  data_path_default: "./"
 
 # ESGF Node Configuration
 esgf:
