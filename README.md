@@ -135,7 +135,7 @@ esgf-download/
 │   ├── __init__.py         # Package initialization
 │   ├── __main__.py         # CLI entry point
 │   ├── classes.py          # Dataset and File classes
-│   ├── config.py           # YAML configuration loader
+│   ├── parser.py           # YAML configuration loader
 │   ├── download.py         # Parallel download functionality
 │   └── login.py            # ESGF authentication
 ├── config.yaml             # Default configuration

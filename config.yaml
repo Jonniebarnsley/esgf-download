@@ -14,7 +14,7 @@ data:
   grid_label: "gn"        # gn - native grid, gr - regridded to lat-lon
   
   scenarios:
-    - "historical"
+    #- "historical"
     - "ssp126"
     - "ssp585"
   
