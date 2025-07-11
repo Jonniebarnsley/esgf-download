@@ -106,31 +106,7 @@ Naming conventions follow ESGF standards – it's recommended that you browse th
 ### Command Line Interface
 Run the download with a configuration file:
 ```bash
-# Use the default config.yaml
 python -m esgf_download config.yaml
-
-# Use a custom configuration file
-python -m esgf_download my_custom_config.yaml
-
-# Show help
-python -m esgf_download --help
-
-# Show version
-python -m esgf_download --version
-```
-
-### Creating Custom Configurations
-You can create multiple configuration files for different download scenarios:
-
-```bash
-# Download historical data
-python -m esgf_download config_historical.yaml
-
-# Download future projections
-python -m esgf_download config_ssp585.yaml
-
-# Download specific variables only
-python -m esgf_download config_temperature_only.yaml
 ```
 
 ### Interactive Exploration
