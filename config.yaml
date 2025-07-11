@@ -1,0 +1,62 @@
+# Configuration file for ESGF download tool
+# This file contains all configurable parameters for downloading climate model data
+# from the Earth System Grid Federation (ESGF)
+
+# Authentication Configuration
+# Set these environment variables: ESGF_USERNAME, ESGF_PASSWORD, DATA_HOME
+auth:
+  username_env: "ESGF_USERNAME"
+  password_env: "ESGF_PASSWORD"
+  data_path_env: "DATA_HOME"
+  data_path_default: "./"
+
+# ESGF Node Configuration
+esgf:
+  myproxy_host: "esgf-node.ipsl.upmc.fr"
+  search_node: "http://esgf-data.dkrz.de/esg-search"
+  data_node_preference: "esgf.ceda.ac.uk"
+
+# Data Selection Configuration
+data:
+  project: "CMIP6"
+  frequency: "mon"        # monthly
+  grid_label: "gn"        # gn - native grid, gr - regridded to lat-lon
+  
+  scenarios:
+    - "ssp126"
+    # - "historical"
+    # - "ssp585"
+  
+  variables:
+    - "tas"
+    - "pr"
+    - "evspsbl"
+    - "mrro"
+    - "thetao"
+    - "so"
+  
+  models:
+    - "CESM2-WACCM"
+    - "IPSL-CM6A-LR"
+    - "MRI-ESM2-0"
+    - "ACCESS-ESM1-5"
+    - "CanESM5"
+    - "CNRM-ESM2-1"
+    - "MIROC-ES2L"
+    # - "ACCESS-CM2"
+    # - "UKESM1-0-LL"
+
+# Variable to Table ID Mapping
+table_mapping:
+  tas: "Amon"
+  pr: "Amon"
+  evspsbl: "Amon"
+  mrro: "Lmon"
+  thetao: "Omon"
+  so: "Omon"
+
+# Model Variant Labels
+# UKESM1-0-LL has a different variant label to most models
+variant_labels:
+  default: "r1i1p1f1"
+  UKESM1-0-LL: "r4i1p1f2" 
