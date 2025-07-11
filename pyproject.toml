@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=45", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "esgf-download"
+version = "0.1.0"
+description = "ESGF climate data downloader with parallel processing"
+authors = [{name = "Your Name"}]
+requires-python = ">=3.7"
+dependencies = [
+    "esgf-pyclient",
+    "requests",
+    "rich",
+    "PyYAML",
+]
+
+[project.scripts]
+esgf-download = "esgf_download.__main__:main"
+
+[tool.setuptools]
+packages = ["esgf_download"] 
