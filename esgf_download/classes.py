@@ -5,13 +5,13 @@ from pyesgf.search.results import FileResult, DatasetResult # type: ignore
 
 class Dataset(DatasetResult):
 
-    def __init__(self, dataset: DatasetResult, data_path: Path = Path(".")):
+    def __init__(self, dataset: DatasetResult, data_home: Path = Path(".")):
 
         # Copy all attributes from the original DatasetResult
         self.__dict__.update(dataset.__dict__)
         self._files: Optional[list] = None  # Cache for files
         self._local_path: Optional[Path] = None  # Cache for local path
-        self.data_path = data_path
+        self.data_home = data_home
 
     @property
     def files(self) -> list:
@@ -41,7 +41,7 @@ class Dataset(DatasetResult):
         if self._local_path is None:
             dataset_id, _ = self.dataset_id.split('|')
             identifiers = dataset_id.split('.')
-            self._local_path = self.data_path / Path(*identifiers)
+            self._local_path = self.data_home / Path(*identifiers)
         return self._local_path
 
 
@@ -49,7 +49,6 @@ class File(FileResult):
 
     def __init__(self, file: FileResult, dataset: Dataset):
         self.__dict__.update(file.__dict__)
-        self.download_complete = False
         self.dataset = dataset
         self.local_path = dataset.local_path / file.filename
 
