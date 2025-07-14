@@ -15,8 +15,9 @@ data:
   
   scenarios:
     #- "historical"
-    - "ssp126"
-    - "ssp585"
+    #- "ssp126"
+    #- "ssp585"
+    - "ssp534-over"
   
   # Variables follow ESGF naming conventions
   variables:
@@ -36,8 +37,8 @@ data:
     - "CanESM5"
     - "CNRM-ESM2-1"
     - "MIROC-ES2L"
-    - "ACCESS-CM2"
-    - "UKESM1-0-LL"
+    #- "ACCESS-CM2"
+    #- "UKESM1-0-LL"
 
 # Variable to Table ID Mapping
 # Amon - atmosphere, Omon - ocean, Lmon - land surface
