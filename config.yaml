@@ -11,7 +11,6 @@ esgf:
 data:
   project: "CMIP6"
   frequency: "mon"        # time resolution: 3hr, day, mon, yr
-  grid_label: "gn"        # gn - native grid, gr - regridded to lat-lon
   
   scenarios:
     #- "historical"
@@ -56,3 +55,11 @@ table_mapping:
 variant_labels:
   default: "r1i1p1f1"
   UKESM1-0-LL: "r4i1p1f2"
+
+# Model Grid Labels  
+# Most models use 'gn' (native grid), but some require 'gr' (regridded to lat-lon)
+# Check ESGF search results if downloads fail - the model may need a different grid label
+# Enter custom grid labels for models here
+grid_labels:
+  default: "gn"
+  IPSL-CM6A-LR: "gr"

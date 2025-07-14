@@ -70,7 +70,7 @@ Table IDs correspond to earth system components:
 - `Lmon`: land surface (monthly)
 
 ### Adding New Models
-Add new models to the `models` list and specify variant labels if needed:
+Add new models to the `models` list and specify variant labels and grid labels if needed:
 
 ```yaml
 data:
@@ -81,7 +81,16 @@ data:
 variant_labels:
   default: "r1i1p1f1"
   NEW-MODEL: "r2i1p1f1"  # if different from default
+
+grid_labels:
+  default: "gn"  # native grid (most common)
+  NEW-MODEL: "gr"  # if model requires regridded data
 ```
+
+**Grid Label Notes:**
+- `gn`: native grid (default for most models)
+- `gr`: regridded to regular lat-lon grid
+- Most models use `gn`, but some (like IPSL-CM6A-LR) require `gr`
 
 ### Different Time Frequencies
 Change the `frequency` parameter:

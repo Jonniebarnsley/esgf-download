@@ -57,7 +57,6 @@ class Config:
         data = self._config['data']
         self.PROJECT = data['project']
         self.FREQUENCY = data['frequency']
-        self.GRID_LABEL = data['grid_label']
         self.SCENARIOS = data['scenarios']
         self.VARIABLES = data['variables']
         self.MODELS = data['models']
@@ -71,6 +70,13 @@ class Config:
         self.VARIANT_LABEL = {}
         for model in self.MODELS:
             self.VARIANT_LABEL[model] = variant_config.get(model, default_variant)
+            
+        # Grid labels - create mapping for all models
+        grid_config = self._config['grid_labels']
+        default_grid = grid_config['default']
+        self.GRID_LABEL = {}
+        for model in self.MODELS:
+            self.GRID_LABEL[model] = grid_config.get(model, default_grid)
 
 
 def load_config(config_path: str) -> Config:
