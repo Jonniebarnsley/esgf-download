@@ -62,4 +62,4 @@ variant_labels:
 # Enter custom grid labels for models here
 grid_labels:
   default: "gn"
-  IPSL-CM6A-LR: "gr"
+  #IPSL-CM6A-LR: "gr"   # atmosphere and land surface components only - ocean is on native grid
