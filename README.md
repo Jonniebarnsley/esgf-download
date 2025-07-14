@@ -83,14 +83,9 @@ variant_labels:
   NEW-MODEL: "r2i1p1f1"  # if different from default
 
 grid_labels:
-  default: "gn"  # native grid (most common)
-  NEW-MODEL: "gr"  # if model requires regridded data
+  default: "gn"  # native grid
+  NEW-MODEL: "gr"  # if model has only published regridded data
 ```
-
-**Grid Label Notes:**
-- `gn`: native grid (default for most models)
-- `gr`: regridded to regular lat-lon grid
-- Most models use `gn`, but some (like IPSL-CM6A-LR) require `gr`
 
 ### Different Time Frequencies
 Change the `frequency` parameter:
