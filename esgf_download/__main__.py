@@ -28,6 +28,7 @@ def main(config_path: str) -> None:
         return
 
     conn = SearchConnection(config.SEARCH_NODE, distrib=True)
+    print(f"Downloading data to {config.DATA_HOME}")
     for scenario, model, variable in product(config.SCENARIOS, config.MODELS, config.VARIABLES):
 
         query = {
@@ -54,7 +55,8 @@ def main(config_path: str) -> None:
         if all(file.exists() for file in dataset.files):
             print(f"All files for {scenario}, {model}, {variable} already exist, skipping download.")
             continue
-
+        
+        print(dataset.dataset_id)
         interrupt = download_dataset(dataset)
         if interrupt:
             break
