@@ -5,6 +5,7 @@ from rich.progress import Progress, SpinnerColumn, TextColumn, BarColumn, \
 
 # local imports
 from esgf_download.classes import Dataset, File
+from esgf_download.console import console
 
 
 # Global keyboard_interrupt instance for thread-safe interrupt handling
@@ -86,14 +87,14 @@ def download_dataset(dataset: Dataset) -> bool:
     # Use ThreadPoolExecutor for parallel downloads
     max_workers = 3  # Adjust this number based on your network and server limits
     
-    # Create rich Progress instance
+    # Create rich Progress instance using the shared console
     with Progress(
         SpinnerColumn(),
         TextColumn("[progress.description]{task.description}"),
         BarColumn(),
         TaskProgressColumn(),
         TimeRemainingColumn(),
-        console=None,  # Use default console
+        console=console,  # Use shared console for consistency
         transient=False  # Keep completed tasks visible
     ) as progress:
         

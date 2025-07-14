@@ -7,6 +7,7 @@ from esgf_download.classes import Dataset
 from esgf_download.login import login_to_esgf
 from esgf_download.download import download_dataset
 from esgf_download.parser import load_config
+from esgf_download.console import console
 
 
 def main(config_path: str) -> None:
@@ -18,17 +19,19 @@ def main(config_path: str) -> None:
     config_path : str, optional
         Path to YAML configuration file.
     """
+
     # Load configuration
     config = load_config(config_path)
 
     try:
         login_to_esgf(config.USERNAME, config.PASSWORD, config.MYPROXY_HOST)
     except Exception as e:
-        print(f"ESGF login failed: {e}")
+        console.print(f"[red]✗ ESGF login failed:[/red] {e}")
         return
 
     conn = SearchConnection(config.SEARCH_NODE, distrib=True)
-    print(f"Downloading data to {config.DATA_HOME}")
+    console.print(f"[blue]📁 Downloading data to[/blue] [bold]{config.DATA_HOME}[/bold]")
+    
     for scenario, model, variable in product(config.SCENARIOS, config.MODELS, config.VARIABLES):
 
         query = {
@@ -40,23 +43,24 @@ def main(config_path: str) -> None:
             'table_id': config.TABLE_ID[variable],
             'frequency': config.FREQUENCY,
             'data_node': config.DATA_NODE_PREFERENCE,
-            'grid_label': config.GRID_LABEL,
+            'grid_label': config.GRID_LABEL[model],
         }
 
         context = conn.new_context(**query, facets=query.keys())
 
         if context.hit_count == 0:
-            print(f"No datasets found for {scenario}, {model}, {variable}.")
+            console.print(f"[yellow]⚠ No datasets found for[/yellow] [dim]{scenario}, {model}, {variable}[/dim]")
             continue
 
         results = context.search()
         dataset = Dataset(list(results)[-1], config.DATA_HOME) # most recent dataset version
 
+        id, node = dataset.dataset_id.split('|')
         if all(file.exists() for file in dataset.files):
-            print(f"All files for {scenario}, {model}, {variable} already exist, skipping download.")
+            console.print(f"[green]✓ {id}[/green] [dim](already exists)[/dim]")
             continue
         
-        print(dataset.dataset_id)
+        console.print(f"[bold]{dataset.dataset_id}[/bold]")
         interrupt = download_dataset(dataset)
         if interrupt:
             break
