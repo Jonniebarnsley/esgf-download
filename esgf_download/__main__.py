@@ -60,7 +60,7 @@ def main(config_path: str) -> None:
             console.print(f"[green]✓ {id}[/green] [dim](already exists)[/dim]")
             continue
         
-        console.print(f"[bold]{dataset.dataset_id}[/bold]")
+        console.print(dataset.dataset_id)
         interrupt = download_dataset(dataset)
         if interrupt:
             break

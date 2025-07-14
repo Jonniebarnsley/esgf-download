@@ -45,7 +45,7 @@ def download_file(file: File, progress: Progress, task_id: TaskID) -> None:
     try:
         response = requests.get(url, stream=True, timeout=30)
         response.raise_for_status()
-        chunk_size = 8192
+        chunk_size = 64 * 1024  # 64KB - good balance of speed and progress updates
 
         # Update task with total size
         progress.update(task_id, total=file.size)

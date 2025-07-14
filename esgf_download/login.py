@@ -36,7 +36,7 @@ def login_to_esgf(username: Optional[str], password: Optional[str], hostname: st
     lm = LogonManager()
     lm.logon(username=username, password=password, hostname=hostname)
     
-    console.print(f"[green]✓ Successfully logged into ESGF node:[/green] [bold]{hostname}[/bold]")
+    console.print(f"[green]✓ Successfully logged into ESGF node:[/green] {hostname}")
     
     # Set up SSL context for secure downloads
     sslcontext = ssl.create_default_context(purpose=ssl.Purpose.SERVER_AUTH)
