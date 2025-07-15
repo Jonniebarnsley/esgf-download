@@ -7,6 +7,10 @@ esgf:
   search_node: "http://esgf-data.dkrz.de/esg-search"
   data_node_preference: "esgf.ceda.ac.uk"
 
+# Download Configuration
+download:
+  max_workers: 8  # Number of parallel downloads (adjust based on network/server limits)
+
 # Data Selection Configuration
 data:
   project: "CMIP6"

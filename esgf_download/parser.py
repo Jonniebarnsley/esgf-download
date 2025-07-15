@@ -53,6 +53,10 @@ class Config:
         self.SEARCH_NODE = esgf['search_node']
         self.DATA_NODE_PREFERENCE = esgf['data_node_preference']
         
+        # Download settings
+        download = self._config['download']
+        self.MAX_WORKERS = download['max_workers']
+        
         # Data settings
         data = self._config['data']
         self.PROJECT = data['project']

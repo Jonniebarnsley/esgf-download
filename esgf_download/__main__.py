@@ -61,7 +61,7 @@ def main(config_path: str) -> None:
             continue
         
         console.print(dataset.dataset_id)
-        interrupt = download_dataset(dataset)
+        interrupt = download_dataset(dataset, config.MAX_WORKERS)
         if interrupt:
             break
 

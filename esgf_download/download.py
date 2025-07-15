@@ -2,7 +2,6 @@ import requests
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from rich.progress import Progress, SpinnerColumn, TextColumn, BarColumn, \
     TaskProgressColumn, TimeRemainingColumn, TaskID
-
 # local imports
 from esgf_download.classes import Dataset, File
 from esgf_download.console import console
@@ -70,7 +69,7 @@ def download_file(file: File, progress: Progress, task_id: TaskID) -> None:
 
 
 
-def download_dataset(dataset: Dataset) -> bool:
+def download_dataset(dataset: Dataset, max_workers: int = 3) -> bool:
     
     """
     Downloads all files in a dataset to a local directory using parallel threads.
@@ -80,12 +79,12 @@ def download_dataset(dataset: Dataset) -> bool:
     ----------
     dataset : Dataset
         ESGF Dataset object whose files will be downloaded.
+    max_workers : int, optional
+        Number of parallel download threads. Default is 3.
     """
 
     dataset.local_path.mkdir(parents=True, exist_ok=True)
     
-    # Use ThreadPoolExecutor for parallel downloads
-    max_workers = 3  # Adjust this number based on your network and server limits
     
     # Create rich Progress instance using the shared console
     with Progress(
@@ -104,6 +103,7 @@ def download_dataset(dataset: Dataset) -> bool:
             task_id = progress.add_task(f"[dim]{file.filename} (queued)", total=file.size)
             file_tasks.append((file, task_id))
         
+        # Use ThreadPoolExecutor for parallel downloads
         with ThreadPoolExecutor(max_workers=max_workers) as executor:
             # Submit all download tasks with their pre-created task IDs
             futures = [
