@@ -29,6 +29,20 @@ class Dataset(DatasetResult):
             # Sort files by start_date (chronological order)
             self._files = sorted(file_objects, key=lambda f: f.start_date)
         return self._files
+    
+    @property
+    def start_date(self) -> Optional[str]:
+        """Get the start date of the dataset."""
+        if len(self.files) > 0:
+            return self.files[0].start_date
+        return None
+    
+    @property
+    def end_date(self) -> Optional[str]:
+        """Get the end date of the dataset."""
+        if len(self.files) > 0:
+            return self.files[-1].end_date
+        return None
 
     @property
     def local_path(self) -> Path:
