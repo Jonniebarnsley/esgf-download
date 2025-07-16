@@ -64,6 +64,7 @@ class Config:
         self.SCENARIOS = data['scenarios']
         self.VARIABLES = data['variables']
         self.MODELS = data['models']
+        self.EXTENSIONS_2300 = data.get('2300_extensions', False)
         
         # Mappings
         self.TABLE_ID = self._config['table_mapping']
