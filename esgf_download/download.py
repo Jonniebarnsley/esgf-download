@@ -1,10 +1,11 @@
 import requests
+from time import sleep
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from rich.progress import Progress, SpinnerColumn, TextColumn, BarColumn, \
     TaskProgressColumn, TimeRemainingColumn, TaskID
 # local imports
 from esgf_download.classes import Dataset, File
-from esgf_download.console import console
+from esgf_download.console import console, MAX_DISPLAY_ROWS
 
 
 # Global keyboard_interrupt instance for thread-safe interrupt handling
@@ -24,7 +25,13 @@ def download_file(file: File, progress: Progress, task_id: TaskID) -> None:
     task_id : TaskID
         Pre-created task ID for this file's progress tracking.
     """
+
+    
+    # Check if file already exists locally
     if file.exists():
+        if len(file.dataset.files) > MAX_DISPLAY_ROWS:
+            progress.remove_task(task_id)
+            return
         progress.update(task_id, description=f"[yellow]⚠ {file.filename} (already exists)")
         progress.update(task_id, completed=file.size or 100)
         return
@@ -42,7 +49,7 @@ def download_file(file: File, progress: Progress, task_id: TaskID) -> None:
     progress.update(task_id, description=f"[cyan]⬇ {filename}")
     
     try:
-        response = requests.get(url, stream=True, timeout=30)
+        response = requests.get(url, stream=True, timeout=60)
         response.raise_for_status()
         chunk_size = 64 * 1024  # 64KB - good balance of speed and progress updates
 
@@ -62,9 +69,15 @@ def download_file(file: File, progress: Progress, task_id: TaskID) -> None:
 
         # Mark task as completed
         progress.update(task_id, description=f"[green]✓ {filename}")
+        if len(file.dataset.files) > MAX_DISPLAY_ROWS:
+            sleep(0.5)
+            progress.remove_task(task_id)
         
     except requests.exceptions.RequestException as e:
-        progress.update(task_id, description=f"[red]✗ {filename} - {e}")
+        error_msg = str(e)
+        if len(error_msg) > 80:  # Truncate if longer than 50 characters
+            error_msg = error_msg[:77] + "..."
+        progress.update(task_id, description=f"[red]✗ {filename} - {error_msg}")
         file.remove()
 
 
@@ -84,7 +97,7 @@ def download_dataset(dataset: Dataset, max_workers: int = 3) -> bool:
     """
 
     dataset.local_path.mkdir(parents=True, exist_ok=True)
-    
+    dataset_size = len(dataset.files)
     
     # Create rich Progress instance using the shared console
     with Progress(
@@ -94,7 +107,7 @@ def download_dataset(dataset: Dataset, max_workers: int = 3) -> bool:
         TaskProgressColumn(),
         TimeRemainingColumn(),
         console=console,  # Use shared console for consistency
-        transient=False  # Keep completed tasks visible
+        transient=dataset_size > MAX_DISPLAY_ROWS  # Remove completed tasks if true
     ) as progress:
         
         # Pre-create all progress tasks in chronological order
