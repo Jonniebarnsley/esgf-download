@@ -2,6 +2,7 @@ import os
 import re
 from pathlib import Path
 from typing import Optional
+from datetime import datetime
 from pyesgf.search.results import FileResult, DatasetResult # type: ignore
 
 class Dataset(DatasetResult):
@@ -27,33 +28,44 @@ class Dataset(DatasetResult):
             search = self.file_context().search(ignore_facet_check=True)
             file_objects = [File(item, self) for item in search]
             # Sort files by start_date (chronological order)
-            self._files = sorted(file_objects, key=lambda f: f.start_date)
+            self._files = sorted(file_objects, key=lambda f: f.filename)
         return self._files
     
     @property
-    def start_date(self) -> Optional[str]:
+    def start_date(self) -> Optional[datetime]:
         """Get the start date of the dataset."""
-        if len(self.files) > 0:
-            return self.files[0].start_date
+        start = self.json.get('datetime_start')
+        if start:
+            # remove Z from end to make it a valid ISO 8601 string
+            start_iso = start.replace('Z', '')
+            return datetime.fromisoformat(start_iso)
         return None
     
     @property
-    def end_date(self) -> Optional[str]:
+    def end_date(self) -> Optional[datetime]:
         """Get the end date of the dataset."""
-        if len(self.files) > 0:
-            return self.files[-1].end_date
+        # Try datetime_stop first, then datetime_end
+        stop = self.json.get('datetime_stop') or self.json.get('datetime_end')
+        if stop:
+            # remove Z from end to make it a valid ISO 8601 string
+            stop_iso = stop.replace('Z', '')
+            return datetime.fromisoformat(stop_iso)
         return None
 
     @property
     def local_path(self) -> Path:
-        
+
         """
         Generates a local path for the dataset based on its ID.
         The path is structured as:
         <data_home>/<project>/<activity>/<institute>/<model>/<experiment>/<realisation>/
             <time_resolution>/<variable>/gr/<version>/
-        where <data_home> is the path to your local data directory. Caches the path in
-        the instance variable _local_path.
+        where <data_home> is the path to your local data directory.
+        
+        Returns
+        -------
+        Path
+            Local path for the dataset
         """
 
         if self._local_path is None:
@@ -62,16 +74,39 @@ class Dataset(DatasetResult):
             self._local_path = self.data_home / Path(*identifiers)
         return self._local_path
 
+    def exists(self) -> bool:
+        """Check if all files in this dataset already exist locally."""
+        if len(self.files) == 0:
+            return False
+        return all(file.exists() for file in self.files)
+
+    def is_empty(self) -> bool:
+        """Check if the dataset is empty."""
+        return len(self.files) == 0
 
 class File(FileResult):
 
     def __init__(self, file: FileResult, dataset: Dataset):
         self.__dict__.update(file.__dict__)
         self.dataset = dataset
-        self.local_path = dataset.local_path / file.filename
-        self._start_date: Optional[str] = None  # cache for start_date
-        self._end_date: Optional[str] = None  # cache for end_date
-
+        self.local_path: Path = self.dataset.local_path / self.filename
+        self._start_date: Optional[datetime] = None  # cache for start_date
+        self._end_date: Optional[datetime] = None  # cache for end_date
+    
+    @property
+    def start_date(self) -> datetime:
+        """Get the start date of the file as a datetime object."""
+        if self._start_date is None:
+            self._start_date, self._end_date = self._date_range()
+        return self._start_date
+    
+    @property
+    def end_date(self) -> datetime:
+        """Get the end date of the file as a datetime object."""
+        if self._end_date is None:
+            self._start_date, self._end_date = self._date_range()
+        return self._end_date
+        
     def exists(self) -> bool:
         return self.local_path.exists()
     
@@ -80,9 +115,9 @@ class File(FileResult):
         if self.exists():
             os.remove(self.local_path)
     
-    def _date_range(self) -> tuple[str, str]:
+    def _date_range(self) -> tuple[datetime, datetime]:
         """
-        Extract the start and end dates from the filename.
+        Extract the start and end dates from the filename and convert to datetime objects.
         
         ESGF filenames follow the pattern:
         variable_table_model_experiment_variant_grid_DATES.nc
@@ -94,7 +129,7 @@ class File(FileResult):
         - For 3-hourly data, it will be YYYYMMDDhhmm-YYYYMMDDhhmm.
         
         Returns:
-            tuple[int, int]: Start date and end date as integers
+            tuple[datetime, datetime]: Start date and end date as datetime objects
             
         Raises:
             ValueError: If the date range cannot be extracted from the filename
@@ -118,21 +153,33 @@ class File(FileResult):
         for pattern in patterns:
             match = re.search(pattern, date_part)
             if match:
-                start, end = match.groups()
-                return start, end
+                start_str, end_str = match.groups()
+                start_dt = self._parse_date_string(start_str)
+                end_dt = self._parse_date_string(end_str)
+                return start_dt, end_dt
         
         raise ValueError(f"Could not extract date range from filename: {self.filename}")
-    
-    @property
-    def start_date(self) -> str:
-        """Get the start date of the file."""
-        if self._start_date is None:
-            self._start_date, self._end_date = self._date_range()
-        return self._start_date
-    
-    @property
-    def end_date(self) -> str:
-        """Get the end date of the file."""
-        if self._end_date is None:
-            self._start_date, self._end_date = self._date_range()
-        return self._end_date
+        
+    def _parse_date_string(self, date_str: str) -> datetime:
+        """
+        Parse a date string into a datetime object.
+        
+        Supports various formats:
+        - YYYY (annual)
+        - YYYYMM (monthly)
+        - YYYYMMDD (daily)
+        - YYYYMMDDhhmm (3-hourly)
+        """
+        length = len(date_str)
+        
+        if length == 4:  # YYYY (annual)
+            return datetime(int(date_str), 1, 1)
+        elif length == 6:  # YYYYMM (monthly)
+            return datetime(int(date_str[:4]), int(date_str[4:6]), 1)
+        elif length == 8:  # YYYYMMDD (daily)
+            return datetime(int(date_str[:4]), int(date_str[4:6]), int(date_str[6:8]))
+        elif length == 12:  # YYYYMMDDhhmm (3-hourly)
+            return datetime(int(date_str[:4]), int(date_str[4:6]), int(date_str[6:8]), 
+                           int(date_str[8:10]), int(date_str[10:12]))
+        else:
+            raise ValueError(f"Unsupported date format: {date_str}")
