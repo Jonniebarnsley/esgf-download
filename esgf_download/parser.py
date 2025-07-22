@@ -80,8 +80,8 @@ class Config:
         grid_config = self._config['grid_labels']
         default_grid = grid_config['default']
         self.GRID_LABEL = {}
-        for model in self.MODELS:
-            self.GRID_LABEL[model] = grid_config.get(model, default_grid)
+        for var in self.VARIABLES:
+            self.GRID_LABEL[var] = grid_config.get(var, default_grid)
 
 
 def load_config(config_path: str) -> Config:
