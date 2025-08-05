@@ -3,14 +3,22 @@
 
 # ESGF Node Configuration
 esgf:
+  # Login node, requiring username and password
+  # Only important if --login flag is used
+  # Many datasets don't require login to download
   myproxy_host: "esgf-node.ipsl.upmc.fr"
-  #search_node: "http://esgf-data.dkrz.de/esg-search"       # Germany (dkrz)
-  #search_node: "http://esgf-node.ipsl.upmc.fr/esg-search"  # France (ipsl)
-  #search_node: "https://esgf.nci.org.au/esg-search"         # Australia (nci)
-  #search_node: "https://esg-dn1.nsc.liu.se/esg-search"       # Sweden (nsc)
-  search_node: "https://esgf-node.ornl.gov/esg-search"       # USA (llnl)
 
-  data_node_preference: "esgf-node.ornl.gov" #"esgf.ceda.ac.uk"
+  # You're most likely to find the dataset you want by searching the ESGF node closest
+  # to the modelling centre that produced the data.
+  # e.g. NASA-GISS data is mostly found on the LLNL node
+  search_node: "http://esgf-data.dkrz.de/esg-search"       # Germany (dkrz)
+  #search_node: "http://esgf-node.ipsl.upmc.fr/esg-search"  # France (ipsl)
+  #search_node: "https://esgf.nci.org.au/esg-search"        # Australia (nci)
+  #search_node: "https://esg-dn1.nsc.liu.se/esg-search"     # Sweden (nsc)
+  #search_node: "https://esgf-node.llnl.gov/esg-search"     # USA (llnl)
+
+  # Prioritise data nodes that are geographically close to you for faster downloads.
+  data_node_preference: "esgf.ceda.ac.uk"
 
 # Download Configuration
 download:
@@ -22,7 +30,7 @@ data:
   frequency: "mon"        # time resolution: 3hr, day, mon, yr
   
   scenarios:
-    #- "historical"
+    - "historical"
     - "ssp126"
     - "ssp534-over"
     - "ssp585"
@@ -37,21 +45,21 @@ data:
     - "pr"        # precipitation
     - "evspsbl"   # evaporation and sublimation
     - "mrro"      # runoff
-    #- "thetao"    # ocean potential temperature
-    #- "so"        # ocean salinity
+    - "thetao"    # ocean potential temperature
+    - "so"        # ocean salinity
   
-  # Specific model versions required – see ESGF web search tool for details
+  # Specific model versions required, e.g. UKESM1-0-LL instead of UKESM 
   models:
-    #- "CESM2-WACCM"  # done
-    #- "IPSL-CM6A-LR" # done
-    #- "MRI-ESM2-0" # done
-    #- "ACCESS-ESM1-5" # done
-    #- "ACCESS-CM2"
-    #- "CanESM5" # done
-    #- "EC-Earth3-Veg" # done
-    - "MIROC-ES2L" # missing thetao, so
-    #- "CNRM-ESM2-1" # missing ssp126, 585
-    #- "UKESM1-0-LL" # done
+    - "CESM2-WACCM"
+    - "IPSL-CM6A-LR"
+    - "MRI-ESM2-0"
+    - "ACCESS-ESM1-5"
+    - "ACCESS-CM2"
+    - "CanESM5"
+    - "EC-Earth3-Veg"
+    - "MIROC-ES2L"
+    - "CNRM-ESM2-1"
+    - "UKESM1-0-LL"
 
 # Variable to Table ID Mapping
 # Amon - atmosphere, Omon - ocean, Lmon - land surface
@@ -70,15 +78,13 @@ variant_labels:
   default: "r1i1p1f1"
   UKESM1-0-LL: "r4i1p1f2"
   MIROC-ES2L: "r1i1p1f2"
-  #CNRM-ESM2-1: "r1i1p1f2" # only for ssp534-over
-  #ACCESS-ESM1-5: "r1i1p1f2" # only for ssp534-over
+  CNRM-ESM2-1: "r1i1p1f2"
+  ACCESS-ESM1-5: "r1i1p1f2"
 
 # Variable Grid Labels  
 # gn - native grid, gr - regridded to lat-lon
 # Check ESGF search results if downloads fail - the variable may need a different grid label
 grid_labels:
-  default: "gn"
-  # tas: "gr"
-  # pr: "gr"
-  # evspsbl: "gr"
-  # mrro: "gr"
+  default: "gr"
+  thetao: "gn"
+  so: "gn"
