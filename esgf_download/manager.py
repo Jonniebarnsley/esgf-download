@@ -16,7 +16,7 @@ from esgf_download.console import console
 class DownloadManager:
     """Manages the ESGF download process."""
     
-    def __init__(self, config):
+    def __init__(self, config, login: bool = False):
         """
         Initialize the download manager.
         
@@ -26,6 +26,7 @@ class DownloadManager:
             Configuration object with all necessary settings
         """
         self.config = config
+        self.login  = login
         self.conn = None
         
     def setup(self):
@@ -34,11 +35,12 @@ class DownloadManager:
         os.environ['ESGF_PYCLIENT_NO_FACETS_STAR_WARNING'] = 'true'
         
         # Login to ESGF
-        try:
-            login_to_esgf(self.config.USERNAME, self.config.PASSWORD, self.config.MYPROXY_HOST)
-        except Exception as e:
-            console.print(f"[red]✗ ESGF login failed:[/red] {e}")
-            return False
+        if self.login:
+            try:
+                login_to_esgf(self.config.USERNAME, self.config.PASSWORD, self.config.MYPROXY_HOST)
+            except Exception as e:
+                console.print(f"[red]✗ ESGF login failed:[/red] {e}")
+                return False
             
         # Create search connection
         self.conn = SearchConnection(self.config.SEARCH_NODE, distrib=True)

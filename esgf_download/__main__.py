@@ -3,7 +3,7 @@ from esgf_download.parser import load_config
 from esgf_download.manager import DownloadManager
 
 
-def main(config_path: str) -> None:
+def main(config_path: str, login: bool) -> None:
     """
     Main application function.
     
@@ -16,7 +16,7 @@ def main(config_path: str) -> None:
     config = load_config(config_path)
     
     # Create and run download manager
-    manager = DownloadManager(config)
+    manager = DownloadManager(config, login)
     manager.run()
 
 
@@ -30,10 +30,15 @@ if __name__ == "__main__":
         help="Path to YAML configuration file"
     )
     parser.add_argument(
+        "--login",
+        action="store_true",
+        help="Log in to ESGF before downloading"
+    )
+    parser.add_argument(
         "--version", 
         action="version", 
         version="%(prog)s 0.1.0"
     )
     
     args = parser.parse_args()
-    main(args.config)
+    main(args.config, args.login)
