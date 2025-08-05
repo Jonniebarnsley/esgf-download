@@ -1,0 +1,62 @@
+# This file contains all configurable parameters for downloading climate model data
+# from the Earth System Grid Federation (ESGF)
+
+# ESGF Node Configuration
+esgf:
+  myproxy_host: "esgf-node.ipsl.upmc.fr"
+  search_node: "https://esgf.nci.org.au/esg-search"         # Australia (nci)
+  data_node_preference: "esgf.nci.org.au"
+
+# Download Configuration
+download:
+  max_workers: 8  # Number of parallel downloads (adjust based on network/server limits)
+
+# Data Selection Configuration
+data:
+  project: "CMIP6"
+  frequency: "mon"        # time resolution: 3hr, day, mon, yr
+  
+  scenarios:
+    - "historical"
+    - "ssp126"
+    - "ssp534-over"
+    - "ssp585"
+  
+  # If true, only download 2300 extensions for ssp126, ssp585, ssp534-over.
+  # Has no effect for any other experiment.
+  2300_extensions: true
+  
+  # Variables follow ESGF naming conventions
+  variables:
+    - "tas"       # surface temperature
+    - "pr"        # precipitation
+    - "evspsbl"   # evaporation and sublimation
+    - "mrro"      # runoff
+    - "thetao"    # ocean potential temperature
+    - "so"        # ocean salinity
+  
+  # Specific model versions required – see ESGF web search tool for details
+  models:
+    - "EC-Earth3-Veg"
+
+# Variable to Table ID Mapping
+# Amon - atmosphere, Omon - ocean, Lmon - land surface
+# Any new variables added above should also be added here with the appropriate table ID
+table_mapping:
+  tas: "Amon"
+  pr: "Amon"
+  evspsbl: "Amon"
+  mrro: "Lmon"
+  thetao: "Omon"
+  so: "Omon"
+
+# Model Variant Labels
+# Enter custom variant labels for models here
+variant_labels:
+  default: "r1i1p1f1"
+
+# Variable Grid Labels  
+# gn - native grid, gr - regridded to lat-lon
+# Check ESGF search results if downloads fail - the variable may need a different grid label
+grid_labels:
+  default: "gn"
