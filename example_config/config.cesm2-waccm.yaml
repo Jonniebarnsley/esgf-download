@@ -1,0 +1,77 @@
+# This file contains all configurable parameters for downloading climate model data
+# from the Earth System Grid Federation (ESGF)
+
+# ESGF Node Configuration
+esgf:
+  # Login node, requiring username and password
+  # Only important if --login flag is used
+  # Many datasets don't require login to download
+  myproxy_host: "esgf-node.ipsl.upmc.fr"
+
+  # You're most likely to find the dataset you want by searching the ESGF node closest
+  # to the modelling centre that produced the data.
+  # e.g. NASA-GISS data is mostly found on the LLNL node
+  search_node: "http://esgf-data.dkrz.de/esg-search"       # Germany (dkrz)
+  #search_node: "http://esgf-node.ipsl.upmc.fr/esg-search"  # France (ipsl)
+  #search_node: "https://esgf.nci.org.au/esg-search"        # Australia (nci)
+  #search_node: "https://esg-dn1.nsc.liu.se/esg-search"     # Sweden (nsc)
+  #search_node: "https://esgf-node.llnl.gov/esg-search"     # USA (llnl)
+
+  # Prioritise data nodes that are geographically close to you for faster downloads.
+  data_node_preference: "esgf.ceda.ac.uk"
+
+# Download Configuration
+download:
+  max_workers: 8  # Number of parallel downloads (adjust based on network/server limits)
+
+# Data Selection Configuration
+data:
+  project: "CMIP6"
+  frequency: "mon"        # time resolution: 3hr, day, mon, yr
+  
+  scenarios:
+    - "historical"
+    - "ssp126"
+    - "ssp534-over"
+    - "ssp585"
+  
+  # If true, only download 2300 extensions for ssp126, ssp585, ssp534-over.
+  # Has no effect for any other experiment.
+  2300_extensions: true
+  
+  # Variables follow ESGF naming conventions
+  variables:
+    - "tas"       # surface temperature
+    - "pr"        # precipitation
+    - "evspsbl"   # evaporation and sublimation
+    - "mrro"      # runoff
+    - "thetao"    # ocean potential temperature
+    - "so"        # ocean salinity
+  
+  # Specific model versions required, e.g. UKESM1-0-LL instead of UKESM 
+  models:
+    - "CESM2-WACCM"
+
+# Variable to Table ID Mapping
+# Amon - atmosphere, Omon - ocean, Lmon - land surface
+# Any new variables added above should also be added here with the appropriate table ID
+table_mapping:
+  tas: "Amon"
+  pr: "Amon"
+  evspsbl: "Amon"
+  mrro: "Lmon"
+  thetao: "Omon"
+  so: "Omon"
+
+# Model Variant Labels
+# Enter custom variant labels for models here
+variant_labels:
+  default: "r1i1p1f1"
+
+# Variable Grid Labels  
+# gn - native grid, gr - regridded to lat-lon
+# Check ESGF search results if downloads fail - the variable may need a different grid label
+grid_labels:
+  default: "gn"
+  thetao: "gn"
+  so: "gn"
